@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Orders\Commands\CreateOrder\" />
     <Folder Include="Warehouses\" />
   </ItemGroup>
 

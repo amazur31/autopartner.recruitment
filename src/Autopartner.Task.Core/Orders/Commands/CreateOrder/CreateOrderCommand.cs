@@ -5,7 +5,7 @@ using MediatR;
 namespace Autopartner.Task.Core.Orders.Commands.CreateOrder;
 public record CreateOrderCommand(string AccountNumber, string CustomerName, ICollection<SelectedItem> SelectedItems) : IRequest<CreateOrderResponse>;
 
-public record SelectedItem(long Id, int Quantity)
+public record SelectedItem(long Id, int Quantity);
 public record CreateOrderResponse(long OrderId);
 
 internal class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, CreateOrderResponse>
