@@ -1,4 +1,5 @@
-﻿using Autopartner.Task.Infrastructure.DAL;
+﻿using System.Reflection.Metadata.Ecma335;
+using Autopartner.Task.Infrastructure.DAL;
 using Autopartner.Task.Infrastructure.DAL.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -22,12 +23,14 @@ internal class GetItemsQueryHandler : IRequestHandler<GetItemsQuery, ICollection
     public async Task<ICollection<ItemEntity>> Handle(GetItemsQuery request, CancellationToken cancellationToken)
     {
         var cacheKey = $"{nameof(ItemEntity)}-{nameof(GetItemsQuery)}-All";
-        await _memoryCache.GetOrCreateAsync(cacheKey, async entry =>
+        var result = await _memoryCache.GetOrCreateAsync(cacheKey, async entry =>
         {
             entry.SlidingExpiration = TimeSpan.FromMinutes(3);
             var allItems = await _context.Items.AsNoTracking().ToListAsync();
             return allItems;
         })!;
-        return new List<ItemEntity>();
+        if (result != null) { return result; }
+        else { return new List<ItemEntity>(); }
+        return result;
     }
 }

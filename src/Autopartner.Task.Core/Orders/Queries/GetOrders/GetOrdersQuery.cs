@@ -20,12 +20,13 @@ public class GetOrdersQueryHandler : IRequestHandler<GetOrdersQuery, ICollection
     public async Task<ICollection<OrderEntity>> Handle(GetOrdersQuery request, CancellationToken cancellationToken)
     {
         var cacheKey = $"{nameof(OrderEntity)}-{nameof(GetOrdersQuery)}-All";
-        await _memoryCache.GetOrCreateAsync(cacheKey, async entry =>
+        var result = await _memoryCache.GetOrCreateAsync(cacheKey, async entry =>
         {
             entry.SlidingExpiration = TimeSpan.FromMinutes(3);
             var allItems = await _context.Orders.AsNoTracking().ToListAsync();
             return allItems;
         })!;
-        return new List<OrderEntity>();
+        if (result != null) { return result; }
+        else { return new List<OrderEntity>(); }
     }
 }

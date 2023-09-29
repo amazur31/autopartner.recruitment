@@ -21,12 +21,13 @@ public class GetLinesByOrderIdQueryHandler : IRequestHandler<GetLinesByOrderIdQu
     public async Task<ICollection<OrderLineEntity>> Handle(GetLinesByOrderIdQuery request, CancellationToken cancellationToken)
     {
         var cacheKey = $"{nameof(OrderLineEntity)}-{nameof(GetLinesByOrderIdQuery)}-{request.OrderId}";
-        await _memoryCache.GetOrCreateAsync(cacheKey, async entry =>
+        var result = await _memoryCache.GetOrCreateAsync(cacheKey, async entry =>
         {
             entry.SlidingExpiration = TimeSpan.FromMinutes(3);
             var allItems = await _context.OrderLines.AsNoTracking().Where(p=>p.OrderId == request.OrderId).ToListAsync();
             return allItems;
         })!;
-        return new List<OrderLineEntity>();
+        if (result != null) { return result; }
+        else { return new List<OrderLineEntity>(); }
     }
 }
