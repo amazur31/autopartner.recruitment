@@ -1,11 +1,14 @@
 ﻿using Autopartner.Task.Infrastructure;
+using Autopartner.Task.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddMemoryCache();
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddCore();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
