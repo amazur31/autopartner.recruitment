@@ -7,4 +7,9 @@
     <UserSecretsId>41374429-db92-4c10-9c92-5158c0a8aa0a</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Autopartner.Task.Core\Autopartner.Task.Core.csproj" />
+    <ProjectReference Include="..\Autopartner.Task.Infrastructure\Autopartner.Task.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
