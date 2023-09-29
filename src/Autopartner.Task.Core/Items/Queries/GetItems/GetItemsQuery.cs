@@ -6,9 +6,9 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Autopartner.Task.Core.Items.Queries.GetItems;
 
-public record GetBudgetsQuery() : IRequest<ICollection<ItemEntity>>;
+public record GetItemsQuery() : IRequest<ICollection<ItemEntity>>;
 
-internal class GetItemsQueryHandler : IRequestHandler<GetBudgetsQuery, ICollection<ItemEntity>>
+internal class GetItemsQueryHandler : IRequestHandler<GetItemsQuery, ICollection<ItemEntity>>
 {
     private readonly IMemoryCache _memoryCache;
     private readonly ApplicationContext _context;
@@ -19,9 +19,9 @@ internal class GetItemsQueryHandler : IRequestHandler<GetBudgetsQuery, ICollecti
         _context = context;
     }
 
-    public async Task<ICollection<ItemEntity>> Handle(GetBudgetsQuery request, CancellationToken cancellationToken)
+    public async Task<ICollection<ItemEntity>> Handle(GetItemsQuery request, CancellationToken cancellationToken)
     {
-        var cacheKey = $"{nameof(ItemEntity)}-{nameof(GetBudgetsQuery)}-All";
+        var cacheKey = $"{nameof(ItemEntity)}-{nameof(GetItemsQuery)}-All";
         await _memoryCache.GetOrCreateAsync(cacheKey, async entry =>
         {
             entry.SlidingExpiration = TimeSpan.FromMinutes(3);

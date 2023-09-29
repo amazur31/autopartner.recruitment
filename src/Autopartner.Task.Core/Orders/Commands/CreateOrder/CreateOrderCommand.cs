@@ -3,7 +3,12 @@ using Autopartner.Task.Infrastructure.DAL.Entities;
 using MediatR;
 
 namespace Autopartner.Task.Core.Orders.Commands.CreateOrder;
-public record CreateOrderCommand(string AccountNumber, string CustomerName, ICollection<SelectedItem> SelectedItems) : IRequest<CreateOrderResponse>;
+public class CreateOrderCommand : IRequest<CreateOrderResponse>
+{
+    public string AccountNumber { get; set; } = null!;
+    public string CustomerName { get; set; } = null!;
+    public ICollection<SelectedItem> SelectedItems { get; set; } = null!;
+}
 
 public record SelectedItem(long Id, int Quantity);
 public record CreateOrderResponse(long OrderId);

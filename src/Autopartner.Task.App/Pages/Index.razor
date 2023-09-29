@@ -1,9 +1,24 @@
-﻿@page "/"
+﻿@using Autopartner.Task.App.Pages.OrderLines
+@using Autopartner.Task.App.Pages.Orders
+@using MudBlazor
+@inject IDialogService Dialog
 
-<PageTitle>Index</PageTitle>
+@page "/"
 
-<h1>Hello, world!</h1>
+<MudPaper>
+<OrdersDataGrid>
+</OrdersDataGrid>
+<MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddNewOrder">Add new Order</MudButton>
 
-Welcome to your new app.
+<OrderLinesDataGrid>
+</OrderLinesDataGrid>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+</MudPaper>
+
+
+@code {
+    void AddNewOrder()
+    {
+        Dialog.Show<CreateOrderDialog>("Create order");
+    }
+}

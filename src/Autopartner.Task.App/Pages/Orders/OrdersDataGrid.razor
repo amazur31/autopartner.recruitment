@@ -4,20 +4,17 @@
 @using MudBlazor;
 @inject IMediator _mediator;
 
-<MudDataGrid Items="@Orders">
+<MudDataGrid SelectedItem="SelectedItem" Items="@Orders">
     <Columns>
-        <PropertyColumn Property="x => x.Id"/>
-        <PropertyColumn Property="x => x.CustomerName" />
-        <PropertyColumn Property="x => x.CreatedAt" />
-        <PropertyColumn Property="x => x.ModifiedAt" />
+        <PropertyColumn Property="x => x!.Id"/>
+        <PropertyColumn Property="x => x!.CustomerName" />
+        <PropertyColumn Property="x => x!.CreatedAt" />
+        <PropertyColumn Property="x => x!.ModifiedAt" />
     </Columns>
 </MudDataGrid>
 
 @code {
     private IEnumerable<OrderEntity> Orders = new List<OrderEntity>();
-
-    protected override async Task OnInitializedAsync()
-    {
-        Orders = await _mediator.Send(new GetOrdersQuery());
-    }
+    [Parameter]
+    public OrderEntity? SelectedItem { get; set; }
 }
