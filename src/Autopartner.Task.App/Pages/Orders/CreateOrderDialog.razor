@@ -17,7 +17,7 @@
                             @bind-Value="Model.AccountNumber" />
                             <MudTextField Label="Customer name"
                             @bind-Value="Model.CustomerName" />
-                            <ItemsDataGrid SelectedItems="SelectedItems"></ItemsDataGrid>
+                            <ItemsDataGrid @bind-SelectedItems="SelectedItems"></ItemsDataGrid>
                         </MudCardContent>
                         <MudCardActions>
                             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="Save">Save</MudButton>

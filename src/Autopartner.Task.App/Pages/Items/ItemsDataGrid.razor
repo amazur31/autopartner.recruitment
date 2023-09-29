@@ -4,7 +4,7 @@
 @using MudBlazor;
 @inject IMediator _mediator
 
-<MudTable T="ItemEntity" Items="@Items" MultiSelection="true" @bind-SelectedItems="SelectedItems" Hover="true">
+<MudTable T="ItemEntity" Items="@Items" MultiSelection="true" SelectedItemsChanged="@SelectedItemsChanged" Hover="true">
     <HeaderContent>
         <MudTh>Id</MudTh>
         <MudTh>Name</MudTh>
@@ -15,18 +15,14 @@
         <MudTd DataLabel="Name">@context.Name</MudTd>
         <MudTd DataLabel="Price">@context.Price</MudTd>
     </RowTemplate>
-    <PagerContent>
-        <MudTablePager PageSizeOptions="new int[]{50, 100}" />
-    </PagerContent>
-    <FooterContent>
-        <MudTd colspan="5">Select All</MudTd>
-    </FooterContent>
 </MudTable>
 @code {
     public ICollection<ItemEntity>? Items { get; set; }
 
     [Parameter]
     public HashSet<ItemEntity> SelectedItems { get; set; } = null!;
+    [Parameter]
+    public EventCallback<HashSet<ItemEntity>> SelectedItemsChanged { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

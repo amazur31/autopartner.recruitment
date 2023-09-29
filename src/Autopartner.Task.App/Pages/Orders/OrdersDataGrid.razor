@@ -4,7 +4,7 @@
 @using MudBlazor;
 @inject IMediator _mediator;
 
-<MudDataGrid SelectedItem="SelectedItem" Items="@Orders">
+<MudDataGrid Hover=true SelectedItemChanged="SelectedItemChanged" Items="@Orders">
     <Columns>
         <PropertyColumn Property="x => x!.Id"/>
         <PropertyColumn Property="x => x!.CustomerName" />
@@ -17,4 +17,18 @@
     private IEnumerable<OrderEntity> Orders = new List<OrderEntity>();
     [Parameter]
     public OrderEntity? SelectedItem { get; set; }
+
+    [Parameter]
+    public EventCallback<OrderEntity> SelectedItemChanged { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Refresh();
+    }
+
+    public async Task Refresh()
+    {
+        Orders = await _mediator.Send(new GetOrdersQuery());
+        StateHasChanged();
+    }
 }

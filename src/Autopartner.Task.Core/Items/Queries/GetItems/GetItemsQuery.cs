@@ -31,6 +31,5 @@ internal class GetItemsQueryHandler : IRequestHandler<GetItemsQuery, ICollection
         })!;
         if (result != null) { return result; }
         else { return new List<ItemEntity>(); }
-        return result;
     }
 }

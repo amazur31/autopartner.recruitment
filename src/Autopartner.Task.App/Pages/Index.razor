@@ -1,24 +1,42 @@
 ﻿@using Autopartner.Task.App.Pages.OrderLines
 @using Autopartner.Task.App.Pages.Orders
+@using Autopartner.Task.Infrastructure.DAL.Entities;
 @using MudBlazor
 @inject IDialogService Dialog
 
 @page "/"
 
 <MudPaper>
-<OrdersDataGrid>
-</OrdersDataGrid>
-<MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddNewOrder">Add new Order</MudButton>
+    <OrdersDataGrid @ref=ordersDataGrid SelectedItemChanged="SelectedItemChanged">
+    </OrdersDataGrid>
 
-<OrderLinesDataGrid>
-</OrderLinesDataGrid>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddNewOrder">Add new Order</MudButton>
+
+    <OrderLinesDataGrid @ref=orderLinesDataGrid OrderId="OrderId">
+    </OrderLinesDataGrid>
 
 </MudPaper>
 
 
 @code {
-    void AddNewOrder()
+    OrderLinesDataGrid? orderLinesDataGrid;
+    OrdersDataGrid? ordersDataGrid;
+    OrderEntity? SelectedItem;
+    long? OrderId { get { if (SelectedItem is null) { return null; } else { return SelectedItem.Id; } } }
+
+    private void SelectedItemChanged(OrderEntity selected)
     {
-        Dialog.Show<CreateOrderDialog>("Create order");
+        SelectedItem = selected;
+        orderLinesDataGrid.Refresh();
+        StateHasChanged();
+    }
+    async Task AddNewOrder()
+    {
+        var dialog = Dialog.Show<CreateOrderDialog>("Create order");
+        var result = await dialog.Result;
+        if (!result.Canceled)
+        {
+            await ordersDataGrid!.Refresh();
+        }
     }
 }

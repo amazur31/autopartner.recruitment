@@ -21,7 +21,12 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if(OrderId is not null)
+        await Refresh();
+    }
+
+    public async Task Refresh()
+    {
+        if (OrderId is not null)
         {
             OrderLines = await _mediator.Send(new GetLinesByOrderIdQuery(OrderId.Value));
         }
