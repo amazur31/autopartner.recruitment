@@ -21,7 +21,7 @@ internal class GetItemsQueryHandler : IRequestHandler<GetBudgetsQuery, ICollecti
 
     public async Task<ICollection<ItemEntity>> Handle(GetBudgetsQuery request, CancellationToken cancellationToken)
     {
-        var cacheKey = $"{nameof(ItemEntity)}-All";
+        var cacheKey = $"{nameof(ItemEntity)}-{nameof(GetBudgetsQuery)}-All";
         await _memoryCache.GetOrCreateAsync(cacheKey, async entry =>
         {
             entry.SlidingExpiration = TimeSpan.FromMinutes(3);
