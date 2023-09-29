@@ -1,0 +1,23 @@
+﻿@using Autopartner.Task.Core.Orders.Queries.GetOrders;
+@using Autopartner.Task.Infrastructure.DAL.Entities;
+@using MediatR;
+@using MudBlazor;
+@inject IMediator _mediator;
+
+<MudDataGrid Items="@Orders">
+    <Columns>
+        <PropertyColumn Property="x => x.Id"/>
+        <PropertyColumn Property="x => x.CustomerName" />
+        <PropertyColumn Property="x => x.CreatedAt" />
+        <PropertyColumn Property="x => x.ModifiedAt" />
+    </Columns>
+</MudDataGrid>
+
+@code {
+    private IEnumerable<OrderEntity> Orders = new List<OrderEntity>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Orders = await _mediator.Send(new GetOrdersQuery());
+    }
+}
