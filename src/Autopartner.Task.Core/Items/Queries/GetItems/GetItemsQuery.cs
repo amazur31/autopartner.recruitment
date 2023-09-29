@@ -1,14 +1,14 @@
-﻿using Autopartner.Task.Core.Items.Models;
-using Autopartner.Task.Infrastructure.DAL;
+﻿using Autopartner.Task.Infrastructure.DAL;
+using Autopartner.Task.Infrastructure.DAL.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Autopartner.Task.Core.Items.Queries.GetItems;
 
-public record GetBudgetsQuery() : IRequest<ICollection<Item>>;
+public record GetBudgetsQuery() : IRequest<ICollection<ItemEntity>>;
 
-internal class GetItemsQueryHandler : IRequestHandler<GetBudgetsQuery, ICollection<Item>>
+internal class GetItemsQueryHandler : IRequestHandler<GetBudgetsQuery, ICollection<ItemEntity>>
 {
     private readonly IMemoryCache _memoryCache;
     private readonly ApplicationContext _context;
@@ -19,15 +19,15 @@ internal class GetItemsQueryHandler : IRequestHandler<GetBudgetsQuery, ICollecti
         _context = context;
     }
 
-    public async Task<ICollection<Item>> Handle(GetBudgetsQuery request, CancellationToken cancellationToken)
+    public async Task<ICollection<ItemEntity>> Handle(GetBudgetsQuery request, CancellationToken cancellationToken)
     {
-        var cacheKey = $"{nameof(Item)}-All";
+        var cacheKey = $"{nameof(ItemEntity)}-All";
         await _memoryCache.GetOrCreateAsync(cacheKey, async entry =>
         {
             entry.SlidingExpiration = TimeSpan.FromMinutes(3);
-            var allItems = await _context.Items.Select(p=>new Item(p)).ToListAsync();
+            var allItems = await _context.Items.AsNoTracking().ToListAsync();
             return allItems;
         })!;
-        return new List<Item>();
+        return new List<ItemEntity>();
     }
 }
